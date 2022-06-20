@@ -26,6 +26,7 @@
     font-size: 15px;
     font-weight: 600;
     color: rgb(216, 245, 255);
+    text-transform: lowercase;
 }
 .search-bar__icon {
     margin-left: auto;
