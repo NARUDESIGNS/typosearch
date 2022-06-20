@@ -1,0 +1,19 @@
+.suggestion {
+    padding: 10px 35px;
+    width: 250px;
+    background-color: black;
+    border-radius: 10px;
+}
+.suggestion__header {
+    color: rgb(209, 209, 209);
+    font-weight: 900;
+}
+.suggestion__sug {
+    padding: 10px 0;
+    color: rgb(177, 177, 177);
+    border-bottom: 2px solid rgb(58, 58, 58);
+}
+.suggestion__sug:nth-last-of-type()  {
+    border: none;
+    color: pink;
+}
