@@ -5,6 +5,7 @@ import SearchIcon from './SearchIcon';
 function SearchBar({ handleSearch, nextWord, searchValue }) {
   return (
     <>
+    { searchValue && <p className="tip">Hit the <span>Tab</span> key to accept suggestion</p> }
     <div className="search-bar" tabIndex="0">
         <input 
           className="search-bar__input" 
@@ -18,7 +19,6 @@ function SearchBar({ handleSearch, nextWord, searchValue }) {
           <SearchIcon />
         </span>
     </div>
-   { searchValue && <p className="tip">Hit the <span>Tab</span> key to accept suggestion</p> }
     </>
   )
 }
