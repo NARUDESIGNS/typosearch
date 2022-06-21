@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import { useEffect, useState } from 'react';
 import './App.css';
 import SearchBar from './components/SearchBar';
@@ -9,26 +10,26 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [canSearch, setCanSearch] = useState(false);
 
-  const getNextWord = async () => {
+
+  // Fetch Suggestions
+  const getSuggestions = useCallback( async () => {
+    let word = searchValue.trim().split(' ');
+    word = word[word.length - 1];
     try {
-      const res = await fetch(`https://api.datamuse.com/words?lc=${searchValue}`);
+      const res = await fetch(`https://api.datamuse.com/words?lc=${word}`);
       const data = await res.json();
       if (data.length > 1) setNextWordSug(data[0].word);
     } catch (err) {
       alert('Error occured while getting susggestions!');
     }
-  }
-  
-  const getCoreectionSugs = async () => {
+
     try {
-      const res = await fetch(`https://api.datamuse.com/words?sp=${searchValue}`);
+      const res = await fetch(`https://api.datamuse.com/words?sp=${word}`);
       const data = await res.json();
       let _data = [];
       for (let i = 0; i < 3; i++) {
         if (data.length >= 3) {
-          if (data[0].word === searchValue.toLowerCase()) data.shift();
-          _data.push(data[i].word);
-          console.log(_data);
+          if (data[0].word !== word.toLowerCase()) _data.push(data[i].word);
         }
         setCorrectionSugs(_data);
       }
@@ -36,7 +37,7 @@ function App() {
       alert('Error occured while getting susggestions!');
       console.log(err);
     }
-  }
+  }, [searchValue]);
   
   const handleSearch = (e) => {
     setSearchValue(e.target.value);
@@ -44,18 +45,32 @@ function App() {
     else setCanSearch(false);
   }
 
+  const selectSug = (correction, suggestion) => {
+    if(correction) {
+      let newSearchValue = searchValue.trim().split(' ');
+      newSearchValue.pop();
+      setSearchValue(newSearchValue + " " + correction);
+    } else {
+      setSearchValue(searchValue + " " + suggestion);
+    }
+  }
+
   useEffect(() => {
     if(canSearch) {
-      getNextWord();
-      getCoreectionSugs();
+      getSuggestions();
     }
-  }, [canSearch]);
+  }, [canSearch, getSuggestions]);
 
   return (
     <div className="App">
       <h1 className="App__header">Typo Friendly Search Demo </h1>
-      <SearchBar handleSearch={handleSearch} nextWord={nextWordSug} searchValue={searchValue}/>
-      <Suggestion correctionSugs={correctionSugs} searchValue={searchValue}/>
+      <SearchBar 
+        handleSearch={handleSearch} 
+        nextWord={nextWordSug} 
+        searchValue={searchValue}
+        selectSug={selectSug}
+      />
+      <Suggestion correctionSugs={correctionSugs} searchValue={searchValue} selectSug={selectSug}/>
     </div>
   );
 }

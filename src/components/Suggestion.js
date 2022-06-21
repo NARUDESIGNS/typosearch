@@ -1,7 +1,7 @@
 import React from 'react';
 import './Suggestion.css';
 
-function Suggestion({ correctionSugs, searchValue }) {
+function Suggestion({ correctionSugs, searchValue, selectSug }) {
   return (
     <>
     {
@@ -10,7 +10,7 @@ function Suggestion({ correctionSugs, searchValue }) {
           <h4 className="suggestion__header">Did you mean?</h4>
           {
             correctionSugs.map(item => {
-              return <p className="suggestion__sug" key={item}>{item}</p>
+              return <p className="suggestion__sug" key={item} onClick={() => selectSug(item)}>{item}</p>
             })
           }
       </div>
